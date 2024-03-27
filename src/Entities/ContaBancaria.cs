@@ -2,30 +2,35 @@ namespace BankApplication.Entidades;
 
 public class ContaBancaria
 {
-    public ContaBancaria(
-        int id,
-        decimal saldo,
-        string agencia,
-        string conta)
+    public ContaBancaria(string titular)
     {
-        Id = id;
-        Saldo = saldo;
-        Agencia = agencia;
-        Conta = conta;
+        var random = new Random();
+
+        Titular = titular;
+        Saldo = 0;
+        Agencia = random.Next(1, 10).ToString();
+        Conta = random.Next(1, int.MaxValue).ToString();
     }
 
-    public int Id { get; set; }
-    public decimal Saldo { get; set; }
-    public string Agencia { get; set; }
-    public string Conta { get; set; }
+    public int Id { get; init; }
+    public string Titular { get; init; }
+    public decimal Saldo { get; private set; }
+    public string Agencia { get; init; }
+    public string Conta { get; init; }
 
-    public void Debitar(decimal valor)
+    public void Sacar(decimal valor)
     {
         Saldo -= valor;
     }
 
-    public void Creditar(decimal valor)
+    public void Depositar(decimal valor)
     {
         Saldo += valor;
+    }
+
+    public void Transferir(ContaBancaria contaDestino, decimal valorTransferencia)
+    {
+        Sacar(valorTransferencia);
+        contaDestino.Depositar(valorTransferencia);
     }
 }
