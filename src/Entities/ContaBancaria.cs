@@ -21,7 +21,7 @@ public class ContaBancaria
     public void Sacar(decimal valor)
     {
         if (!PossuiSaldoMaiorOuIgual(valor))
-            throw new SaldoInsuficienteException($"O saldo atual é menor do que R$ {valor}.");
+            throw new SaldoInsuficienteException($"O saldo atual é menor do que R$ {valor}");
 
         Saldo -= valor;
     }

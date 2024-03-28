@@ -54,7 +54,7 @@ public class ContaBancariaService
         var contaBancaria = ObterConta(contaId);
 
         if (contaBancaria.PossuiSaldo())
-            throw new ContaNaoEncerradaException($"É necessário zerar o saldo antes de encerrar a conta. Saldo atual R$ {contaBancaria.Saldo}.");
+            throw new ContaNaoEncerradaException($"É necessário zerar o saldo antes de encerrar a conta. Saldo atual R$ {contaBancaria.Saldo}");
 
         _contaBancariaRepository.RemoverConta(contaBancaria);
     }
