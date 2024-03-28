@@ -82,9 +82,9 @@ void Depositar()
         var saldoDaConta = contaBancariaService.Depositar(contaId, valorDeposito);
         Console.WriteLine($"Depósito realizado. O saldo atual da conta é R$ {saldoDaConta}.");
     }
-    catch (ContaNaoEncontradaException)
+    catch (ContaNaoEncontradaException ex)
     {
-        Console.WriteLine($"Não foi encontrada uma conta para o ID {contaId}. Por favor, tente novamente.");
+        LogarException(ex);
         Depositar();
     }
 }
@@ -104,7 +104,7 @@ void Sacar()
     }
     catch (Exception ex) when (ex is ContaNaoEncontradaException || ex is SaldoInsuficienteException)
     {
-        Console.WriteLine($"{ex.Message} Tente novamente.");
+        LogarException(ex);
         Sacar();
     }
 }
@@ -147,7 +147,7 @@ void RealizarTransferencia()
     }
     catch (Exception ex) when (ex is ContaNaoEncontradaException || ex is SaldoInsuficienteException)
     {
-        Console.WriteLine($"{ex.Message} Tente novamente.");
+        LogarException(ex);
         RealizarTransferencia();
     }
 
@@ -164,9 +164,10 @@ void EncerrarConta()
         contaBancariaService.Encerrar(contaId);
         Console.WriteLine("Conta encerrada com sucesso.");
     }
-    catch (ContaNaoEncerradaException exception)
+    catch (ContaNaoEncerradaException ex)
     {
-        Console.WriteLine(exception.Message);
+        LogarException(ex);
+        EncerrarConta();
     }
 }
 
@@ -194,4 +195,14 @@ T ObterEConverterValorDigitado<T>()
         Console.WriteLine($"O valor digitado deve ser do tipo {typeof(T)}. Digite novamente: ");
         return ObterEConverterValorDigitado<T>();
     }
+}
+
+void LogarException(Exception ex)
+{
+    var corOriginalDaFonte = Console.ForegroundColor;
+    Console.ForegroundColor = ConsoleColor.Red;
+
+    Console.WriteLine($"Erro: {ex.Message}. Tente novamente.");
+
+    Console.ForegroundColor = corOriginalDaFonte;
 }
