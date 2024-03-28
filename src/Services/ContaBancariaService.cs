@@ -42,6 +42,7 @@ public class ContaBancariaService
     public decimal Depositar(int contaId, decimal valor)
     {
         var contaBancaria = ObterConta(contaId);
+
         contaBancaria.Depositar(valor);
         _contaBancariaRepository.PersistirAtualizacoes();
 
@@ -52,10 +53,8 @@ public class ContaBancariaService
     {
         var contaBancaria = ObterConta(contaId);
 
-        if (contaBancaria!.PossuiSaldo())
-        {
+        if (contaBancaria.PossuiSaldo())
             throw new ContaNaoEncerradaException($"É necessário zerar o saldo antes de encerrar a conta. Saldo atual R$ {contaBancaria.Saldo}.");
-        }
 
         _contaBancariaRepository.RemoverConta(contaBancaria);
     }
@@ -63,11 +62,6 @@ public class ContaBancariaService
     public decimal Sacar(int contaId, decimal valorSaque)
     {
         var contaBancaria = ObterConta(contaId);
-
-        if (!contaBancaria.PodeSacar(valorSaque))
-        {
-            throw new SaldoInsuficienteException();
-        }
 
         contaBancaria.Sacar(valorSaque);
 

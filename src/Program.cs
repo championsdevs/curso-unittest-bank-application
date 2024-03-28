@@ -4,7 +4,7 @@ var contaBancariaService = new ContaBancariaService();
 
 while (true)
 {
-    Console.WriteLine("\nO que deseja fazer?\n");
+    Console.WriteLine("\nMenu principal\n");
     Console.WriteLine("1 - Cadastrar conta");
     Console.WriteLine("2 - Depositar");
     Console.WriteLine("3 - Sacar");
@@ -102,14 +102,9 @@ void Sacar()
         var saldoDaConta = contaBancariaService.Sacar(contaId, valorSaque);
         Console.WriteLine($"Saque realizado. O saldo atual da conta é R$ {saldoDaConta}.");
     }
-    catch (ContaNaoEncontradaException)
+    catch (Exception ex) when (ex is ContaNaoEncontradaException || ex is SaldoInsuficienteException)
     {
-        Console.WriteLine($"Não foi encontrada uma conta para o ID {contaId}. Por favor, tente novamente.");
-        Sacar();
-    }
-    catch (SaldoInsuficienteException)
-    {
-        Console.WriteLine($"O saldo não é suficiente para realizar um saque de {valorSaque}. Tente novamente.");
+        Console.WriteLine($"{ex.Message} Tente novamente.");
         Sacar();
     }
 }
@@ -145,8 +140,17 @@ void RealizarTransferencia()
 
     LogSeparador();
     Console.WriteLine($"Realizando transferência de R$ {valorTransferencia}.");
-    contaBancariaService.Transferir(contaOrigemId, contaDestinoId, valorTransferencia);
-    Console.WriteLine($"Transferência de R$ {valorTransferencia} realizada com sucesso.");
+    try
+    {
+        contaBancariaService.Transferir(contaOrigemId, contaDestinoId, valorTransferencia);
+        Console.WriteLine($"Transferência de R$ {valorTransferencia} realizada com sucesso.");
+    }
+    catch (Exception ex) when (ex is ContaNaoEncontradaException || ex is SaldoInsuficienteException)
+    {
+        Console.WriteLine($"{ex.Message} Tente novamente.");
+        RealizarTransferencia();
+    }
+
     LogSeparador();
 }
 

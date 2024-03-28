@@ -20,6 +20,9 @@ public class ContaBancaria
 
     public void Sacar(decimal valor)
     {
+        if (!PossuiSaldoMaiorOuIgual(valor))
+            throw new SaldoInsuficienteException();
+
         Saldo -= valor;
     }
 
@@ -39,7 +42,7 @@ public class ContaBancaria
         return Saldo > 0;
     }
 
-    public bool PodeSacar(decimal valorSaque)
+    private bool PossuiSaldoMaiorOuIgual(decimal valorSaque)
     {
         return Saldo >= valorSaque;
     }
