@@ -9,7 +9,7 @@ public class ContaBancariaRepository(BankApplicationDbContext dbContext)
     public void PersistirConta(ContaBancaria contaBancaria)
     {
         _dbContext.Add(contaBancaria);
-        _dbContext.SaveChanges();
+        PersistirAtualizacoes();
     }
 
     public ContaBancaria? ObterConta(int id)
@@ -25,5 +25,11 @@ public class ContaBancariaRepository(BankApplicationDbContext dbContext)
     public void PersistirAtualizacoes()
     {
         _dbContext.SaveChanges();
+    }
+
+    public void RemoverConta(ContaBancaria contaBancaria)
+    {
+        _dbContext.Remove(contaBancaria);
+        PersistirAtualizacoes();
     }
 }

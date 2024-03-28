@@ -33,4 +33,14 @@ public class ContaBancaria
         Sacar(valorTransferencia);
         contaDestino.Depositar(valorTransferencia);
     }
+
+    public bool PossuiSaldo()
+    {
+        return Saldo > 0;
+    }
+
+    public bool PodeSacar(decimal valorSaque)
+    {
+        return Saldo >= valorSaque;
+    }
 }
